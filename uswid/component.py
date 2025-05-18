@@ -133,6 +133,10 @@ class uSwidComponent:
         self.source_dir: Optional[str] = None
         """Status, with specific terms and conditions for its use, e.g. 'DO NOT SHIP'"""
         self.activation_status: Optional[str] = None
+        """Ancestry, e.g. 'ancestor'"""
+        self.ancestors: Optional[str] = None
+        """Patches, e.g. 'patch'"""
+        self.patches: Optional[str] = None
 
     def add_source_filename(self, source_file: str) -> None:
         """Adds a source filename, i.e. what file helped created this component"""

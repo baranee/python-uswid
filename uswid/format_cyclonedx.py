@@ -131,6 +131,16 @@ class uSwidFormatCycloneDX(uSwidFormatBase):
         except KeyError:
             pass
 
+        try:
+            component.ancestors = data["pedigree"]["ancestors"]
+        except KeyError:
+            pass
+
+        try:
+            component.patches = data["pedigree"]["patches"]
+        except KeyError:
+            pass
+
         for hash_data in data.get("hashes", []):
             payload = uSwidPayload()
             payload.add_hash(
@@ -382,8 +392,21 @@ class uSwidFormatCycloneDX(uSwidFormatBase):
         if component.version_scheme:
             metadata["versionScheme"] = str(component.version_scheme)
 
+        # pedigrees
+        pedigrees: Optional[List[Dict[str, str]]] = []
+
+        pedigree: Optional[Dict[str, str]] = {}
         if component.activation_status:
-            root["pedigree"] = {"notes": component.activation_status}
+            pedigree["notes"] = component.activation_status
+        if component.ancestors:
+            pedigree["ancestors"] = component.ancestors
+        if component.patches:
+            pedigree["patches"] = component.patches
+        if pedigree:
+            pedigrees.append(pedigree)
+
+        if pedigrees:
+            root["pedigree"] = pedigrees
 
         licenses: List[Dict[str, Any]] = []
         for link in component.links:
